@@ -5,6 +5,7 @@
     SG_ID: "sg-0aa5dff7e9a9bb856"
     ami_id: "ami-0220d79f3f480ecf5"
     env: dev
+    domain_name: "chittis.online"
     Instances:
     - mongodb
     - catalogue
@@ -26,6 +27,31 @@
     - name: print the ec2_output
       ansible.builtin.debug:
         msg: "{{ ec2_output }}"  
+
+    - name: Record creation
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: " {{ item.item }}-{{ env }}.{{ domain_name }}" # mongodb-env.chittis.online
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].private_ip_address }}"
+        wait: true 
+      loop: "{{ ec2_output.results }}"  
+         
+
+    - name: Record creation
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: "roboshop -{{ env }}.{{ domain_name }}" # roboshop-env.chittis.online
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].public_ip_address }}"
+        wait: true 
+      loop: "{{ ec2_output.results }}"  
+      when: item.item == "frontend"
+        
 
 
 
