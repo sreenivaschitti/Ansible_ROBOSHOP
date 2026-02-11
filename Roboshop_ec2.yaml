@@ -1,0 +1,37 @@
+- name: Create Ec2 instances
+  hosts: all
+  connection: local
+  vars:
+    SG_ID: "sg-0aa5dff7e9a9bb856"
+    ami_id: "ami-0220d79f3f480ecf5"
+    env: dev
+    Instances:
+    - mongodb
+    - catalogue
+  tasks:
+    - name: ec2-istance
+      amazon.aws.ec2_instance:
+        instance_type: t2.micro
+        image_id: "{{ ami_id }}"
+        security_group: "{{ SG_ID }}"
+        name: "{{ item }}"
+        tags:
+          Project: ROBOSHOP
+          Componant: "{{ item }}"
+          Environment: "{{ env }}"
+          Name: "{{ item }} - {{ env }}"
+      loop: "{{ instances }}" 
+      register: ec2_output
+
+    - name: print the ec2_output
+      ansible.builtin.debug:
+        msg: "{{ ec2_output }}"  
+
+
+
+      
+
+
+
+
+
