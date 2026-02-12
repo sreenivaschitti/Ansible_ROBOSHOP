@@ -24,12 +24,20 @@
         path: /app
         state: directory
 
-    - name: Download foo.conf
+
+    - name: delete catalogue zip file
+      ansible.builtin.file:
+          path: /tmp/catalogue.zip
+          state: absent      
+
+    - name: Download catatlogue.zip
       ansible.builtin.get_url:
         url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
         dest: /tmp/catalogue.zip
 
-    - name: Extract foo.tgz into /var/lib/foo
+     
+
+    - name: Extract catalogue.zip
       ansible.builtin.unarchive:
         src: /tmp/catalogue.zip
         dest: /app 
@@ -60,6 +68,8 @@
     - name: print the output
       ansible.builtin.debug:
         msg: "{{ catalogue_output }}"    
+
+
 
 
 
