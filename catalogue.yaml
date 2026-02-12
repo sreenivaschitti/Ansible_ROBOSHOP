@@ -49,11 +49,11 @@
        dest: /etc/yum.repos.d/mongo.repo   
 
     - name: install mongodb
-      ansible.builtin.package:
+      ansible.builtin.dnf:
         name: mongodb-mongosh
         state: present
     - name: check products loaded
-      ansible.builtin.command: mongosh --host "{{ MONGODB_HOST }}" --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+      ansible.builtin.command: 
         register: catalogue_output
 
     - name: print the output
