@@ -25,4 +25,40 @@
       url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
       dest: /tmp/catalogue.zip
 
-      
+    - name: Extract foo.tgz into /var/lib/foo
+      ansible.builtin.unarchive:
+        src: /tmp/catalogue.zip
+        dest: /app 
+
+    - name: Install packages based on package.json.
+      community.general.npm:
+        path: /app
+
+    - name: copy service
+      ansible.builtin.copy:
+       src: catalogue.service
+       dest: /etc/systemd/system/catalogue.service
+
+    - name: copy mongo repo
+      ansible.builtin.copy:
+       src: mongo.repo
+       dest: /etc/yum.repos.d/mongo.repo   
+
+    - name: install mongodb
+      ansible.builtin.package:
+        name: mongodb-mongosh
+        state: present
+    - name: check products loaded
+      ansible.builtin.command: mongosh --host "{{ MONGODB_HOST }}" --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+        register: catalogue_output
+
+    - name: print the output
+    ansible.builtin.debug:
+      msg: "{{ catalogue_output }}"    
+
+
+
+
+
+
+
