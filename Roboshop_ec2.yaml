@@ -8,14 +8,14 @@
     domain_name: "chittis.online"
     Instances:
     - redis
-    - user
+    
     
   tasks:
     - name: ec2-istance
       amazon.aws.ec2_instance:
         instance_type: t2.micro
         image_id: "{{ ami_id }}"
-        security_group_ids: "{{ SG_ID }}"
+        security_group: "{{ SG_ID }}"
         name: "{{ item }}"
         tags:
           Project: ROBOSHOP
