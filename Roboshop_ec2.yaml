@@ -7,18 +7,18 @@
     env: dev
     domain_name: "chittis.online"
     Instances:
-    - mongodb
-    - catalogue
+    - redis
+    
   tasks:
     - name: ec2-istance
       amazon.aws.ec2_instance:
         instance_type: t2.micro
         image_id: "{{ ami_id }}"
-        security_group: "{{ SG_ID }}"
+        security_group_ids: "{{ SG_ID }}"
         name: "{{ item }}"
         tags:
           Project: ROBOSHOP
-          Componant: "{{ item }}"
+          Component: "{{ item }}"
           Environment: "{{ env }}"
           Name: "{{ item }} - {{ env }}"
       loop: "{{ Instances }}" 
@@ -44,7 +44,7 @@
       amazon.aws.route53:
         state: present
         zone: "{{ domain_name }}"
-        record: "roboshop -{{ env }}.{{ domain_name }}" # roboshop-env.chittis.online
+        record: "roboshop-{{ env }}.{{ domain_name }}" # roboshop-env.chittis.online
         type: A
         ttl: 1
         value: "{{ item.instances[0].public_ip_address }}"
