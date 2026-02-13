@@ -8,6 +8,7 @@
     domain_name: "chittis.online"
     Instances:
     - redis
+    - user
     
   tasks:
     - name: ec2-istance
