@@ -23,8 +23,8 @@
 
     - name: Download catatlogue.zip
       ansible.builtin.get_url:
-        url: https://roboshop-artifacts.s3.amazonaws.com/fronend-v3.zip
-        dest: /tmp/user.zip  
+        url: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+        dest: /tmp/frontend.zip  
 
     - name: unarchieve frontend
       ansible.builtin.unarchive:
