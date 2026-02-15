@@ -1,0 +1,46 @@
+- name: create fronend
+  hosts: fronend
+  become: yes
+  tasks:
+
+    - name: enable nginx:1.24 -y
+      ansible.builtin.command: dnf module enable nginx:1.24 -y
+
+    - name: install nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: remove default content
+      ansible.builtin.file:
+        path: /usr/share/nginx/html
+        state: absent
+    
+    - name: delete user zip file
+      ansible.builtin.file:
+          path: /tmp/fronend.zip
+          state: absent      
+
+    - name: Download catatlogue.zip
+      ansible.builtin.get_url:
+        url: https://roboshop-artifacts.s3.amazonaws.com/fronend-v3.zip
+        dest: /tmp/user.zip  
+
+    - name: unarchieve frontend
+      ansible.builtin.unarchive:
+        src: /tmp/frontend.zip
+        dest: /usr/share/nginx/html
+        remote_src: yes        
+
+    - name: start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        enabled: yes      
+
+
+
+
+
+
+        
