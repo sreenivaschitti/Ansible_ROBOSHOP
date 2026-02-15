@@ -62,10 +62,11 @@
   
   - name: install dependencie
     ansible.builtin.pip:
-        name: PyMySQL
+        name: "{{ item }}"
         executable: pip3.9
-    args:
-        chdir: /app 
+    loop:
+    - PyMySQL 
+    - cryptography
   
   
   
