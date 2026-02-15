@@ -1,5 +1,5 @@
-- name: create fronend
-  hosts: fronend
+- name: create frontend
+  hosts: frontend
   become: yes
   tasks:
 
